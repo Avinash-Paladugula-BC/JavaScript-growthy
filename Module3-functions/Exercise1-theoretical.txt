@@ -1,0 +1,15 @@
+*****Differences between function declaration(FD) and function expression(FE) ****
+- FD's have the function  name while FE's may or maynot have
+- FD's are hoisted while FE's are not
+- FD's can be invoked before that particualr line is reached since it is hoisted but not the same in case of FE's
+- FEs can be passed to other functions while FDs can't
+
+
+
+*****Arrow function rules****
+- we use fat arrow (=>) for the arrow functions
+- the syntax of arrow funciton is : parameters enclosed inside the paranthesis separated by comma, followed by fat arrow and the function block.
+- We can make use of concise body arrow functions which is of 3 types: 0 parameters, 1 parameter, >=2 parameters.
+- when there are 0 or greater than 1 parameters then we need to use the paranthesis "()"
+- if there is only 1 parameter then we need not use the "()" instead directly write the parameter name and everything other is same
+- if there is single statement then we need not use the "{}" and no need of "return" keyword, directly write the statement and will return the obtained result.
