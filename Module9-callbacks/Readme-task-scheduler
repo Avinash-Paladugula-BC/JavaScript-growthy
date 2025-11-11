@@ -1,0 +1,12 @@
+Since we need to few tasks to put in the array, write those tasks and store it in respective variables
+Let the names of those tasks be task1, task2 and task3
+Store all the tasks in an array called tasks
+
+taskScheduler function:
+It takes the array of tasks as arguments
+It contains another function called runTask whose resposibility is to call the tasks
+While calling those callback funcitons we need to pass the another callback function which is the next element in the tasks array
+
+individual task:
+They take callback function as argument.
+To simulate the processing time we use setTimeout() and do some task then call the callback function to maintain the order of the execution.
