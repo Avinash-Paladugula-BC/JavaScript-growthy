@@ -1,0 +1,11 @@
+{
+  "name": "exercise2-yarn",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Avinash",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "packageManager": "yarn@4.11.0"
+}
