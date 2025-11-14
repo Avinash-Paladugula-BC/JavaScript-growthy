@@ -4,39 +4,79 @@ const albums = document.getElementById("albums");
 const albumImages = document.getElementById("album-images");
 
 async function updateDropdown(userEndpoint){
-    let response = await fetch(userEndpoint);
-    let users = await response.json();
-    users.forEach((user) => {
-        let newOption = document.createElement("option");
-        newOption.value = user.id;
-        newOption.textContent = user.username;
-        userDropdown.appendChild(newOption);   
-    });
+    try{
+        let response = await fetch(userEndpoint);
+        let users = await response.json();
+        users.forEach((user) => {
+            let newOption = document.createElement("option");
+            newOption.value = user.id;
+            newOption.textContent = user.username;
+            userDropdown.appendChild(newOption);   
+        });
+    }
+    catch(error){
+        console.error("Error while updating the users to dropdown list: ", error);
+    }
 }
 
 async function updateAlbums(albumEndpoint, userId){
-    let response = await fetch(albumEndpoint);
-    let albumList = await response.json();
-    let albumCollection = document.getElementById("albumCollection");
-    if(albumCollection){
-        albumCollection.innerHTML="";
-    }else{
-        albumCollection = document.createElement("div");
+    try{
+        let response = await fetch(albumEndpoint);
+        let albumList = await response.json();
+        let albumCollection = document.getElementById("albumCollection");
+        if(albumCollection){
+            albumCollection.innerHTML="";
+        }else{
+            albumCollection = document.createElement("div");
+        }
+        albumCollection.setAttribute("id", "albumCollection");
+        albumList.forEach(album => {
+            if(album.userId != userId) return;
+            let albumDiv = document.createElement('button');
+            albumDiv.setAttribute("class", "album-button");
+            albumDiv.innerText = album.title
+
+            albumDiv.addEventListener("click", () => updateImages("https://jsonplaceholder.typicode.com/photos",album.id));
+
+            albumCollection.append(albumDiv);
+        })
+        albums.after(albumCollection);
     }
-    albumCollection.setAttribute("id", "albumCollection");
-    albumList.forEach(album => {
-        if(album.userId != userId) return;
-        let albumDiv = document.createElement('button');
-        albumDiv.setAttribute("class", "album-button");
-        albumDiv.innerText = album.title
-
-        albumDiv.addEventListener("click", () => updateImages("https://jsonplaceholder.typicode.com/photos",album.id));
-
-        albumCollection.append(albumDiv);
-    })
-    albums.after(albumCollection);
+    catch(error){
+        console.error(`Error while fetching the albums of the user with userid ${userId}`);
+    }
+    
 }
 
+
+async function updateImages(imagesEndpoint, albumId){
+    try{
+        let response = await fetch(imagesEndpoint);
+        let images = await response.json();
+        let imagesCollection = document.getElementById("imageCollection");
+        if(imagesCollection){
+            imagesCollection.innerHTML="";
+        }else{
+            imagesCollection = document.createElement("div");
+        }
+        imagesCollection.setAttribute("id", "imageCollection");
+        images.forEach(image => {
+            if(image.albumId!=albumId) return;
+            let newImage = document.createElement("div");
+            newImage.setAttribute("class", "image");
+            newImage.innerText = image.title;
+            imagesCollection.append(newImage);
+        })
+        albumImages.after(imagesCollection);
+    }
+    catch(error){
+        console.error("Error while updating the images: ", error);
+    }
+    
+    
+}
+
+updateDropdown("https://jsonplaceholder.typicode.com/users");
 userDropdown.addEventListener("change", async (event)=>{
     const userId = event.target.value;
     if(userId==="") return;
@@ -45,26 +85,3 @@ userDropdown.addEventListener("change", async (event)=>{
     const albumCollection = document.getElementById("imageCollection");
     if(albumCollection) albumCollection.remove();
 });
-
-async function updateImages(url, albumId){
-    let response = await fetch(url);
-    let images = await response.json();
-    let imagesCollection = document.getElementById("imageCollection");
-    if(imagesCollection){
-        imagesCollection.innerHTML="";
-    }else{
-        imagesCollection = document.createElement("div");
-    }
-    imagesCollection.setAttribute("id", "imageCollection");
-    images.forEach(image => {
-        if(image.albumId!=albumId) return;
-        let newImage = document.createElement("div");
-        newImage.setAttribute("class", "image");
-        newImage.innerText = image.title;
-        imagesCollection.append(newImage);
-    })
-    albumImages.after(imagesCollection);
-
-}
-
-updateDropdown("https://jsonplaceholder.typicode.com/users");
